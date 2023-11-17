@@ -82,9 +82,4 @@ command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 source /usr/share/nvm/init-nvm.sh
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
-# eval "$(fnm env --use-on-cd)" 
-
-# Set editor default keymap to emacs (`-e`) or vi (`-v`)
-# bindkey -e
-
-# vim:filetype=zsh:nowrap
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"

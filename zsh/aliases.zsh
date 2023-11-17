@@ -1,3 +1,4 @@
 alias ls="ls --color"
-alias hl="dbus-launch Hyprland"
-alias vim="nvim"
+alias yay="paru"
+alias yeet="paru -R"
+alias vim="lvim"

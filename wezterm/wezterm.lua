@@ -13,7 +13,8 @@ end)
 
 config.front_end = "OpenGL"
 config.color_scheme = "Catppuccin Mocha"
-config.font = wezterm.font_with_fallback({"Monocraft", "JetBrainsMono Nerd Font"})
+config.font = wezterm.font_with_fallback({"Hack", "JetBrainsMono Nerd Font"})
+config.font_size = 10.0
 
 config.window_decorations = "RESIZE"
 

@@ -6,13 +6,25 @@ lvim.plugins = {
     { "mbbill/undotree" },
     { "tpope/vim-fugitive" },
     { "mfussenegger/nvim-dap-python" },
+    { "AckslD/swenv.nvim" },
+    { "stevearc/dressing.nvim" },
+    {
+        "simrat39/symbols-outline.nvim",
+        config = function()
+            require('symbols-outline').setup()
+        end
+    },
 }
 
 -- Python setup
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
+lvim.lsp.automatic_configuration.skipped_servers = vim.tbl_filter(function(server)
+  return server ~= "jedi_language_server"
+end, lvim.lsp.automatic_configuration.skipped_servers)
 local formatters = require("lvim.lsp.null-ls.formatters")
 formatters.setup({ { name = "black" }, })
-lvim.format_on_save.enabled = "true"
-lvim.format_on_save.pattern = { "*.py" }
+-- lvim.format_on_save.enabled = "true"
+-- lvim.format_on_save.pattern = { "*.py" }
 
 local linters = require("lvim.lsp.null-ls.linters")
 linters.setup({ { command = "pylint", filetypes = { "python" } } })

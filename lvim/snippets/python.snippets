@@ -1,0 +1,17 @@
+snippet #!
+	#!/usr/bin/env
+
+snippet cl
+	class ${1:ClassName}:
+		"""${0:description}"""
+	
+snippet cla
+	class ${1:ClassName}:
+		"""${2:description}"""
+		def __init__(self, ${3:args})
+			self.$3 = $3
+			${0}
+
+snippet defi
+	def __init__(self, ${1:args}):
+		${0}

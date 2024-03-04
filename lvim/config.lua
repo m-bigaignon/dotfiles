@@ -6,7 +6,6 @@ lvim.plugins = {
     { "mbbill/undotree" },
     { "tpope/vim-fugitive" },
     { "mfussenegger/nvim-dap-python" },
-    { "AckslD/swenv.nvim" },
     { "stevearc/dressing.nvim" },
     {
         "simrat39/symbols-outline.nvim",
@@ -14,17 +13,51 @@ lvim.plugins = {
             require('symbols-outline').setup()
         end
     },
+    {
+        "kevinhwang91/nvim-ufo",
+        dependencies = 'kevinhwang91/promise-async'
+    },
+    {
+        "ThePrimeagen/harpoon",
+        branch = "harpoon2",
+        dependencies = { "nvim-lua/plenary.nvim" }
+    }
 }
+
+-- Gitsigns config
+lvim.builtin.gitsigns.opts.current_line_blame = true
+lvim.builtin.gitsigns.opts.current_line_blame_opts.delay = 100
+
+
+-- Harpoon settings
+local harpoon = require("harpoon")
+harpoon:setup({})
+local conf = require("telescope.config").values
+local function toggle_telescope(harpoon_files)
+    local file_paths = {}
+    for _, item in ipairs(harpoon_files.items) do
+        table.insert(file_paths, item.value)
+    end
+
+    require("telescope.pickers").new({}, {
+        prompt_title = "Harpoon",
+        finder = require("telescope.finders").new_table({
+            results = file_paths,
+        }),
+        previewer = conf.file_previewer({}),
+        sorter = conf.generic_sorter({}),
+    }):find()
+end
 
 -- Python setup
 vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "pyright" })
 lvim.lsp.automatic_configuration.skipped_servers = vim.tbl_filter(function(server)
-  return server ~= "jedi_language_server"
+    return server ~= "pyright"
 end, lvim.lsp.automatic_configuration.skipped_servers)
 local formatters = require("lvim.lsp.null-ls.formatters")
 formatters.setup({ { name = "black" }, })
--- lvim.format_on_save.enabled = "true"
--- lvim.format_on_save.pattern = { "*.py" }
+lvim.format_on_save.enabled = "false"
+lvim.format_on_save.pattern = { "*.py" }
 
 local linters = require("lvim.lsp.null-ls.linters")
 linters.setup({ { command = "pylint", filetypes = { "python" } } })
@@ -95,17 +128,26 @@ lvim.builtin.which_key.mappings["b"] = {
         "Sort by directory",
     }
 }
-lvim.builtin.which_key.mappings["P"] = {
-    name = "Python",
-    s = { "<cmd>lua require('swenv.api').pick_venv()<CR>", "Choose Env" },
-}
 
--- vim-fugitive keymaps
-lvim.builtin.which_key.mappings["G"] = {
-    name = "Git",
-    b = { ":Git blame", "Blame" },
+lvim.builtin.which_key.mappings["h"] = {
+    name = "Harpoon",
+    e = {
+        function() toggle_telescope(harpoon:list()) end,
+        "Open harpoon window"
+    },
+    a = {
+        function() harpoon:list():append() end,
+        "Append to list"
+    },
+    h = {
+        function() harpoon:list():prev() end,
+        "Prev"
+    },
+    l = {
+        function() harpoon:list():next() end,
+        "Next"
+    }
 }
-
 
 lvim.keys.normal_mode["<leader>pv"] = ":Ex<CR>"
 lvim.keys.normal_mode["J"] = "mzJ`z"
@@ -128,11 +170,16 @@ lvim.keys.visual_mode["<leader>d"] = "\"_d"
 lvim.keys.insert_mode["<C-c>"] = "<Esc>"
 
 -- replace the word that you are currently on
-lvim.keys.normal_mode["<leader>r"] = [[:%s/\<<C-r><C-w\>/<C-r><C-w>, /gI<Left><Left><Left>]]
-
+-- lvim.keys.normal_mode["<leader>rw"] = [[:%s/<C-r><C-w>/<C-r><C-w>/gI<Left><Left><Left>]]
+--
 -- Ex mode remapped to no-op
 lvim.keys.normal_mode["Q"] = "<nop>"
---
+
+-- Shout-out file
+lvim.keys.normal_mode["<leader><leader>"] = function()
+    vim.cmd("so")
+end
+
 -- Ctrl-f to switch project with tmux > gotta rebind for wezterm
 -- lvim.keys.normal_mode["<C-f>"] = "<cmd>silent !tmux neww tmux-sessionizer<CR>"
 --
@@ -145,8 +192,3 @@ lvim.keys.normal_mode["Q"] = "<nop>"
 --
 -- Auto chmod executable files
 -- lvim.keys.normal_mode["<leader>x", "<cmd>!chmod +x %<CR>", { silent = true })
---
--- Shout-out file
--- lvim.keys.normal_mode["<leader><leader>"] = function()
---     vim.cmd("so")
--- end

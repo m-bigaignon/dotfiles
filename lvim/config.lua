@@ -21,9 +21,10 @@ lvim.plugins = {
         "ThePrimeagen/harpoon",
         branch = "harpoon2",
         dependencies = { "nvim-lua/plenary.nvim" }
-    }
+    },
 }
 
+lvim.builtin.luasnip.sources.friendly_snippets = false
 -- Gitsigns config
 lvim.builtin.gitsigns.opts.current_line_blame = true
 lvim.builtin.gitsigns.opts.current_line_blame_opts.delay = 100
@@ -56,8 +57,8 @@ lvim.lsp.automatic_configuration.skipped_servers = vim.tbl_filter(function(serve
 end, lvim.lsp.automatic_configuration.skipped_servers)
 local formatters = require("lvim.lsp.null-ls.formatters")
 formatters.setup({ { name = "black" }, })
-lvim.format_on_save.enabled = "false"
-lvim.format_on_save.pattern = { "*.py" }
+-- lvim.format_on_save.enabled = "false"
+-- lvim.format_on_save.pattern = { "*.py" }
 
 local linters = require("lvim.lsp.null-ls.linters")
 linters.setup({ { command = "pylint", filetypes = { "python" } } })
@@ -92,6 +93,12 @@ vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
 vim.opt.colorcolumn = "80"
+
+vim.opt.foldcolumn = "1"
+vim.opt.foldlevel = 99
+vim.opt.foldlevelstart = 99
+vim.opt.foldenable = true
+
 
 -- telescope keymaps
 local builtin = require('telescope.builtin')
@@ -169,6 +176,15 @@ lvim.keys.normal_mode["<leader>d"] = "\"_d"
 lvim.keys.visual_mode["<leader>d"] = "\"_d"
 lvim.keys.insert_mode["<C-c>"] = "<Esc>"
 
+local ufo = require("ufo")
+ufo.setup({
+    provider_selector = function(bufnr, filetype, buftype)
+        return {'treesitter', 'indent'}
+    end
+})
+
+lvim.keys.normal_mode["zR"] = ufo.openAllFolds
+lvim.keys.normal_mode["zM"] = ufo.closeAllFolds
 -- replace the word that you are currently on
 -- lvim.keys.normal_mode["<leader>rw"] = [[:%s/<C-r><C-w>/<C-r><C-w>/gI<Left><Left><Left>]]
 --

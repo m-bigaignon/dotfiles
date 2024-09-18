@@ -11,6 +11,7 @@ wezterm.on('gui-startup', function()
     window:gui_window():maximize()
 end)
 
+config.enable_wayland = true
 config.front_end = "OpenGL"
 config.color_scheme = "Catppuccin Mocha"
 config.font = wezterm.font_with_fallback({"Hack", "JetBrainsMono Nerd Font"})

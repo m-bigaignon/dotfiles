@@ -78,8 +78,9 @@ EQUALS
 EOF
 
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-source /usr/share/nvm/init-nvm.sh
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init - zsh)"
+
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

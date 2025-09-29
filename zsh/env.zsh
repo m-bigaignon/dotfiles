@@ -2,8 +2,7 @@
 ## PATH & ENV Var
 ##
 
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-export PYENV_ROOT="$HOME/.pyenv"
+export PROFILE="$HOME/.config/zsh/options.zsh"
 export PATH="$HOME/.scripts:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.cargo/bin:$PATH"
